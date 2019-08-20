@@ -1,0 +1,28 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.6.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'pl.postgresql_indexer'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('elasticsearch.version', '7.3.0')
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'org.json', name: 'json', version: '20180813'
+	compile 'org.projectlombok:lombok'
+	compile group: 'org.elasticsearch', name: 'elasticsearch', version: '7.3.0'
+	compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version: '7.3.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+}
