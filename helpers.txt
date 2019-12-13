@@ -1,0 +1,20 @@
+curl -X GET "localhost:9200/_cat/indices/&s=index&pretty"
+curl -X GET "localhost:9200/bicycles/_doc/5?pretty"
+
+curl -X PUT "localhost:9200/twitter/_doc/1?refresh&pretty" -H 'Content-Type: application/json' -d'
+{
+    "user": "kimchy"
+}
+'
+curl -X GET "localhost:9200/bicycles/_count&pretty"
+curl -X GET "localhost:9200/twitter/_count?pretty" -H 'Content-Type: application/json' -d'
+{
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+'
+
+curl -X GET "localhost:9200/bicycles/_count?pretty"
+
+
