@@ -1,6 +1,16 @@
 package pl.postgresql_indexer.indexer.domain;
 
 import lombok.Data;
+import org.elasticsearch.search.DocValueFormat;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 @Data
 public class Document {
@@ -21,9 +31,9 @@ public class Document {
 
     private String gender;
 
-    private String starttime;
+    private Instant starttime;
 
-    private String stoptime;
+    private Instant stoptime;
 
     private String tripduration;
 
@@ -55,6 +65,21 @@ public class Document {
 
     }
 
+    private void saveData(String dateStart, String dateEnd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        TemporalAccessor temporalAccessor = formatter.parse(dateStart);
+        LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+
+        TemporalAccessor temporalAccessor2 = formatter.parse(dateEnd);
+        LocalDateTime localDateTime2 = LocalDateTime.from(temporalAccessor2);
+        ZonedDateTime zonedDateTime2 = ZonedDateTime.of(localDateTime2, ZoneId.systemDefault());
+
+        this.starttime = zonedDateTime.toInstant();
+        this.stoptime = zonedDateTime2.toInstant();
+    }
+
     public Document(String[] inputs) {
         this.trip_id = inputs[0];
         this.year = inputs[1];
@@ -64,8 +89,7 @@ public class Document {
         this.hour = inputs[5];
         this.usertype = inputs[6];
         this.gender = inputs[7];
-        this.starttime = inputs[8];
-        this.stoptime = inputs[9];
+        this.saveData(inputs[8], inputs[9]);
         this.tripduration = inputs[10];
         this.temperature = inputs[11];
         this.events = inputs[12];
@@ -145,19 +169,19 @@ public class Document {
         this.gender = gender;
     }
 
-    public String getStarttime() {
+    public Instant getStarttime() {
         return starttime;
     }
 
-    public void setStarttime(String starttime) {
+    public void setStarttime(Instant starttime) {
         this.starttime = starttime;
     }
 
-    public String getStoptime() {
+    public Instant getStoptime() {
         return stoptime;
     }
 
-    public void setStoptime(String stoptime) {
+    public void setStoptime(Instant stoptime) {
         this.stoptime = stoptime;
     }
 
